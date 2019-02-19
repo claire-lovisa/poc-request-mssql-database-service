@@ -7,6 +7,7 @@ const password = process.env.DB_PASSWORD;
 const server = process.env.DB_SERVER;
 const database = process.env.DB_NAME;
 const port = process.env.DB_PORT;
+const batchSize = parseInt(process.env.BATCH_SIZE);
 
 const config = {
   user: user,
@@ -31,10 +32,20 @@ async function processMssql(config, sql) {
   try {
     let pool = await sql.connect(config)
 
-    let result1 = await pool.request()
-      .query('select * from Customers')
+    let rowsAffected = batchSize;
+    let offset = 0;
+    let loop = 1;
 
-    console.log(result1)
+    while(rowsAffected == batchSize) {
+      let result = await pool.request()
+        .query(`SELECT * FROM Customers ORDER BY CustomerId OFFSET ${offset} ROWS FETCH NEXT ${batchSize} ROWS ONLY;`)
+      console.log(`Batch number ${loop}: ${result.rowsAffected} rows affected`);
+
+      offset += batchSize;
+      loop += 1;
+      rowsAffected = result.rowsAffected;
+    }
+
   } catch (err) {
     console.log(`An error has occured: ${err}`);
   }
