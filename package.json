@@ -1,0 +1,18 @@
+{
+  "name": "poc-request-mssql-database-service",
+  "version": "0.1.0",
+  "description": "Microservice that communicates with a MSSQL database",
+  "dependencies": {
+    "mssql": "^4.3.2"
+  },
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claire-lovisa/poc-request-mssql-database-service.git"
+  },
+  "author": "Claire Lovisa",
+  "license": "MIT"
+}
